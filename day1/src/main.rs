@@ -29,7 +29,6 @@ pub fn solve_day1_part2(input: String) -> u128 {
         total_fuel_requirement += module_fuel;
 
         loop {
-            println!("{:?}", module_fuel); // DEBUG
             let new_module_fuel = calculate_fuel_requirement(module_fuel);
             
             /* terminating condition */
