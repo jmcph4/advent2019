@@ -32,6 +32,10 @@ pub fn run_intcode_program(program: Program) -> Program {
     opcodes.clone()
 }
 
+pub fn get_noun_verb_pair(n: usize) -> (u8, u8) {
+    ((n / 99) as u8, (n % 100) as u8)
+}
+
 pub fn solve_day2(input: String) -> Opcode {
     let mut opcodes: Program = Vec::new();
 
@@ -48,13 +52,35 @@ pub fn solve_day2(input: String) -> Opcode {
     program_result[0]
 }
 
-pub fn solve_day2_part2(input: String) -> Opcode {
-    unimplemented!();
+pub fn solve_day2_part2(input: String) -> u128 {
+    let mut i: usize = 0;
+
+    loop {
+        let mut opcodes: Program = Vec::new();
+
+        for elem in input.split(",") {
+            opcodes.push(Opcode::from_str(elem.trim()).unwrap());
+        }
+
+        let (noun, verb): (u8, u8) = get_noun_verb_pair(i);
+
+        // modify input as per problem specification
+        opcodes[1] = noun.into();
+        opcodes[2] = verb.into();
+
+        let program_result: Program = run_intcode_program(opcodes);
+
+        if program_result[0] == 19690720 {
+            return (100 * noun as u128 + verb as u128) as u128;
+        }
+
+        i += 1;
+    }
 }
 
 fn main() {
     println!("{:?}", solve_day2(fs::read_to_string("input.txt").expect("Failed to read input file.")));
-    // println!("{:?}", solve_day2_part2(fs::read_to_string("input.txt").expect("Failed to read input file.")));
+    println!("{:?}", solve_day2_part2(fs::read_to_string("input.txt").expect("Failed to read input file.")));
 }
 
 #[cfg(test)]
